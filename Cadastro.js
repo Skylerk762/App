@@ -1,3 +1,4 @@
+
 import {Button, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 import { TextInput } from "react-native";
@@ -183,3 +184,5 @@ const [porteiroApertado, setporteiroApertado] =useState(false)
 
 );
 }
+
+
