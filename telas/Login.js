@@ -1,5 +1,5 @@
 
-import { Button, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "react-native";
@@ -19,7 +19,7 @@ export default function Login() {
       resizeMode:"contain",
       alignSelf:"center",
       marginBottom:60
-     }} source={require("./imagens/img-escola.png")} />
+     }} source={require("../imagens/img-escola.png")} />
 
    <TextInput  style ={{
     alignSelf:'center',

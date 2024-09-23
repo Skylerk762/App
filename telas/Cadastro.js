@@ -34,7 +34,7 @@ const [porteiroApertado, setporteiroApertado] =useState(false)
       resizeMode:"contain",
       alignSelf:"center",
       marginBottom:60
-     }} source={require("./imagens/img-escola.png")} />
+     }} source={require("../imagens/img-escola.png")} />
     <Text style={{
       width:"22%",
       fontWeight:"bold",

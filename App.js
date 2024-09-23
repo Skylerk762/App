@@ -1,7 +1,8 @@
-import AppNavigator from "./AppNavigator";
+import AppNavigator from './telas/AppNavigator'
 
 export default function App(){
-  return(
-    <AppNavigator/>
+  return (
+<AppNavigator/>
   )
+
 }
