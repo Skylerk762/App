@@ -10,6 +10,7 @@ import GerenciarTurmas from "./GerenciarTurmas"
 import AddTurma from "./AddTurma"
 import RemoverTurma from "./RemoverTurma"
 import LiberarTurmas from "./LiberarTurmas"
+import RecuperarSenha from "./RecuperarSenha"
 
 export default function AppNavigator(){
     const Stack = createStackNavigator()
@@ -18,6 +19,7 @@ export default function AppNavigator(){
             <Stack.Navigator screenOptions={{headerShown:false}}>
             <Stack.Screen name="Login" component={Login}/>
             <Stack.Screen name="VisualizarTurmas" component={VisualizarTurmas}/>
+            <Stack.Screen name="RecuperarSenha" component={RecuperarSenha}/>
             <Stack.Screen name="LiberarTurmas" component={LiberarTurmas}/>
             <Stack.Screen name="RemoverTurma" component={RemoverTurma}/>
             <Stack.Screen name="AddTurma" component={AddTurma}/>

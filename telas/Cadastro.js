@@ -1,186 +1,197 @@
 
-import {Button, Text, TouchableOpacity, View } from "react-native";
+import {Alert, Button, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 import { TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { CheckBox } from "react-native-elements";
 import { Image } from "react-native";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../src/firebaseConfig";
 
 export default function App() {
 const navigation= useNavigation ()
 const [admApertado, setadmApertado] =useState(false)
 const [porteiroApertado, setporteiroApertado] =useState(false)
- function AdmPressionado () {
-  setadmApertado (!admApertado)
-  setporteiroApertado(false)
 
-}
- function porteiroPressionado () {
-  setadmApertado (false)
-  setporteiroApertado(!porteiroApertado)
+  const Navigation = useNavigation();
 
-}
-  return (
-   <View style ={{
-    flex:1,
-    justifyContent:'center',
-    padding:20
-   }
-   
-  }>
-     <Image style={{
-      width:150,
-      height:150,
-      resizeMode:"contain",
-      alignSelf:"center",
-      marginBottom:60
-     }} source={require("../imagens/img-escola.png")} />
-    <Text style={{
-      width:"22%",
-      fontWeight:"bold",
-      color:"darkgray"
-    }}>Usuário</Text>
-    <TextInput style ={{
-    alignSelf:'center',
-    borderWidth:1,
-    borderRadius:8,
-    width:"100%",
-    padding:10,
-    shadowOpacity:0.25,
-    marginBottom:20,
-    borderColor:"gray",
-    shadowColor:"black",
-    backgroundColor:"white",
-    elevation:5
+    const [senha, setSenha] = useState('');
+    const [senha1, setSenha1] = useState('');
+    const [email, setEmail] = useState('');
+
+    const criacaoConta = async () => {
+
+        if (senha.length === 0 || email.length === 0 || senha1.length === 0){
+            Alert.alert('', 'Não deixe campos vazios!')
+            return;
+        }
+        if (senha !== senha1){
+            Alert.alert('', 'As senhas precisam ser iguais!')
+            return;
+        }
     
-    
-   }}
-    placeholder="Digite o seu usuário"
-    >
-    
-    </TextInput>
-    <Text style={{
-      width:"100%",
-      fontWeight:"bold",
-      color:"darkgray"
-    }}
-    >Senha</Text>
-   <TextInput  style ={{
-    alignSelf:'center',
-    borderWidth:1,
-    borderRadius:8,
-    width:"100%",
-    padding:10,
-    shadowOpacity:0.25,
-    marginBottom:20,
-    borderColor:"gray",
-    shadowColor:"black",
-    backgroundColor:"white",
-    elevation:5
-   }}
-    placeholder="informe a senha"  />
-    <Text style={{
-      width:"100%",
-      fontWeight:"bold",
-      color:"darkgray"
-    }}>Confirmar senha</Text>
-   <TextInput style ={{
-   alignSelf:'center',
-   borderWidth:1,
-   borderRadius:8,
-   width:"100%",
-   padding:10,
-   shadowOpacity:0.25,
-   marginBottom:20,
-   borderColor:"gray",
-   shadowColor:"black",
-   backgroundColor:"white",
-   elevation:5
-   }} placeholder="confirme a senha"/>
-   <Text style={{
-    alignSelf:"center",
-    margin:7,
-    fontWeight:"bold",
-    color:"darkgray"
-   }}>Tipo de conta:</Text>
-   <View style={{
-    alignSelf:'center',
-    alignContent:"space-between",
-    flexDirection:"row"
-   }}>
+        try {
+            await createUserWithEmailAndPassword(auth, email, senha);
+            Alert.alert('', 'Conta criada com sucesso.',
+              [
+              {
+                Text: 'Ok',
+                onPress: ()=> Navigation.navigate('Login')
+              }
+            ]
+            )
+        } catch (error) {
+            console.log(error.code)
+            if(error.code == 'auth/invalid-email'){
+                Alert.alert('', 'O E-Mail tem que ser válido!')
+                return;
+            }
+            if (error.code == 'auth/weak-password'){
+                Alert.alert('', 'A senha é muito curta!')
+                return;
+            }
+            if (error.code == 'auth/email-already-in-use'){
+                Alert.alert('', 'Este E-Mail já é cadastrado!')
+                return;
+            }
+        }
+    }
 
-    <CheckBox title=""
-    checkedIcon="check"
-    uncheckedIcon="square-o"
-    checkedColor="blue"
-    checked={admApertado}
-    onPress={()=> AdmPressionado()}
-    >
-      
-    </CheckBox>
-    <Text style={{
-      marginTop:16,
-      marginLeft:-20,
-      color:"darkgray",
-      fontWeight:"bold"
-    }}>Administração</Text>
+    return(
+        <View style={{
+            flex:1,justifyContent:'center', padding:15
+        }}>
+            <StatusBar backgroundColor={'blue'}/>
+            <Image style={{
+               width:100,
+               height:100,
+               alignSelf:"center",
+               resizeMode:'contain'
+            }} source={require('../imagens/img-escola.png')} />
 
-    <CheckBox title=""
-    checkedIcon="check"
-    uncheckedIcon="square-o"
-    checkedColor="blue"
-    checked={porteiroApertado}
-    onPress={()=>porteiroPressionado ()}
-    >
-      
-    </CheckBox>
-    <Text style={{
-      marginTop:16,
-      marginLeft:-20,
-      color:"darkgray",
-      fontWeight:"bold"
-    }}>
-    Porteiro</Text>
-      </View>
+            <Text style={{
+                marginTop:'2%',
+                color:'gray',
+                fontSize:18,
+                fontWeight:'bold',
+                alignSelf:'center'
+            }}>Crie a sua conta</Text>
 
-   <TouchableOpacity style ={{
-    alignSelf:'center',
-    borderWidth:1,
-    borderRadius:8,
-    width:"100%",
-    padding:10,
-    margin: 5,
-    backgroundColor:'lightblue'
-   }}>
-     <Text style ={{
-      alignSelf:'center'
-     }}>
-      Criar conta
-   </Text>
-   </TouchableOpacity>
-   <TouchableOpacity style ={{
-    alignSelf:'center',
-    borderWidth:1,
-    borderRadius:5,
-    width:"100%",
-    padding:10,
-    margin: 5,
-    backgroundColor:'lightblue'
-   }} 
-   onPress={()=> navigation.goBack()}>
-    <Text style ={{
-      alignSelf:'center'
-    }}>
-      voltar
-    </Text>
-   </TouchableOpacity>
+            <Text style={{
+                marginTop:'15%',
+                color:'gray',
+                fontWeight:'bold'
+            }}>
+                E-Mail
+            </Text>
+            
+            <TextInput
+            placeholder="Informe o seu E-Mail"
+            style={{
+                marginTop:'1%',
+                borderWidth:1,
+                padding:4,
+                height:33,
+                borderColor:'#ccc',
+                elevation:2,
+                backgroundColor:'white',
+                borderRadius:7,
+            }}
+            value={email}
+            onChangeText={setEmail}
+            />
 
-   
+            <Text style={{
+                marginTop:'5%',
+                color:'gray',
+                fontWeight:'bold'
+            }}>
+                Senha
+            </Text>
+            
+            <TextInput
+            placeholder="Informe a sua senha"
+            style={{
+                marginTop:'1%',
+                borderWidth:1,
+                padding:4,
+                height:33,
+                borderColor:'#ccc',
+                elevation:2,
+                backgroundColor:'white',
+                borderRadius:7
+            }}
+            value={senha}
+            onChangeText={setSenha}
+            secureTextEntry={true}
+            />
+
+            <Text style={{
+                marginTop:'5%',
+                color:'gray',
+                fontWeight:'bold'
+            }}>
+                Confirmar senha
+            </Text>
+            
+            <TextInput
+            placeholder="Confirme a senha anterior"
+            style={{
+                marginTop:'1%',
+                borderWidth:1,
+                padding:4,
+                height:33,
+                borderColor:'#ccc',
+                elevation:2,
+                backgroundColor:'white',
+                borderRadius:7,
+            }}
+            value={senha1}
+            onChangeText={setSenha1}
+            secureTextEntry={true}
+            />
+
+                <TouchableOpacity style={{
+                backgroundColor:'blue',
+                padding:5,
+                borderRadius:8,
+                width:"100%",
+                marginTop:'15%',
+                alignSelf:'center'
+                }}
+                onPress={()=>criacaoConta()}
+                >
+                <Text style={{
+                    color:'white',
+                    fontWeight:'bold',
+                    alignSelf:'center',
+                    fontSize:16
+                }}>
+                    Criar conta
+                </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={{
+                backgroundColor:'gray',
+                padding:5,
+                borderRadius:8,
+                width:"100%",
+                marginTop:'5%',
+                alignSelf:'center'
+                }}
+                onPress={()=>Navigation.navigate('Login')}
+                >
+                <Text style={{
+                    color:'white',
+                    fontWeight:'bold',
+                    alignSelf:'center',
+                    fontSize:16
+                }}>
+                    Voltar
+                </Text>
+            </TouchableOpacity>
 
    </View>
-
-
-
 
 );
 }

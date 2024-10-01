@@ -38,7 +38,8 @@ const navigation= useNavigation ()
       <Text style={{
         color:"white",
         textAlign:'center',
-        fontSize:16
+        fontSize:16,
+        fontWeight:'bold'
       }}>Visualizar Turmas</Text>
      </TouchableOpacity>
 
@@ -56,13 +57,35 @@ const navigation= useNavigation ()
       <Text style={{
         color:"white",
         textAlign:'center',
-        fontSize:16
+        fontSize:16,
+         fontWeight:'bold'
       }}>Gerenciamento de Turmas</Text>
      </TouchableOpacity>
 
-    
 </View>
-     
+
+<TouchableOpacity style={{
+            marginTop:'3%',
+            backgroundColor:'gray',
+            borderRadius:7,
+            padding:6,
+            width:'40%',
+            alignSelf:'center',
+            marginTop:'15%'
+        }}
+        onPress={()=>navigation.navigate('Login')}
+        >
+            <Text style={{
+                color:'white',
+                fontWeight:'bold',
+                alignSelf:"center",
+
+            }}
+            >
+                Voltar
+            </Text>
+        </TouchableOpacity>  
+
    </View>
     
   );

@@ -6,13 +6,13 @@ import { Image, Text, View } from "react-native";
 import { Divider } from "react-native-elements";
 import { TextInput } from "react-native-gesture-handler";
 import { db } from "../src/firebaseConfig";
+import moment from "moment-timezone";
 
 export default function LiberarTurmas(){
     const navigation = useNavigation() 
     const [apertadoBtn1Turno, setApertadoBtn1Turno] = useState(false);
     const [apertadoBtn2Turno, setApertadoBtn2Turno] = useState(false);
     const [apertadoBtn3Turno, setApertadoBtn3Turno] = useState(false);
-
 
     const [turmas, setTurmas] = useState([]);
     
@@ -52,7 +52,6 @@ export default function LiberarTurmas(){
         exibirTurmas()
     },[])
 
-
     const handleLiberarTurma = async (id) => {
         setTurmas(prevTurmas =>
             prevTurmas.map(turma => 
@@ -66,9 +65,11 @@ export default function LiberarTurmas(){
         );
     
         try {
+            const turma = turmas.find(turma => turma.id === id);
             const turmaRef = doc(db, 'turmas', id);
             await updateDoc(turmaRef, {
-                turmaLiberada: !turmas.find(turma => turma.id === id).turmaLiberada
+                turmaLiberada: !turma.turmaLiberada,
+                horaLiberacao: !turma.turmaLiberada ? moment().tz('America/Sao_Paulo').format('HH:mm:ss') : null 
             });
         } catch (error) {
             console.error("Erro ao atualizar turma no Firestore:", error);

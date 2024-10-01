@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import { Image, Text, View } from "react-native";
 import { Divider } from "react-native-elements";
 import { TextInput } from "react-native-gesture-handler";
@@ -12,6 +12,9 @@ export default function VisualizarTurmas(){
     const [apertadoBtn1Turno, setApertadoBtn1Turno] = useState(false);
     const [apertadoBtn2Turno, setApertadoBtn2Turno] = useState(false);
     const [apertadoBtn3Turno, setApertadoBtn3Turno] = useState(false);
+
+    const [txtNumeroTurma, setTxtNumeroTurma] = useState('');
+    const [turmaDetalhada, setTurmaDetalhada] = useState(null);
 
     const [turmas, setTurmas] = useState([]);
 
@@ -40,14 +43,27 @@ export default function VisualizarTurmas(){
         const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
         setTurmas(data)
-    } catch(error){
-        console.log(error)
-    }
+        } catch(error){
+            console.log(error)
+        }
     }
     
     useEffect(()=>{
         exibirTurmas()
     },[])
+
+    const exibirTurmaDetalhada = async (txtNumeroTurma) => {
+
+        if(!txtNumeroTurma.trim()){
+            Alert.alert('','Não deixe o campo vazio!')
+        }
+       const turmaExistente = turmas.find(turma => turma.numeroTurma === txtNumeroTurma);
+       if(turmaExistente){
+        setTurmaDetalhada(turmaExistente);
+       } else{
+        Alert.alert('', 'Turma não encontrada!')
+       }
+    }
 
     return(
         <View style={{
@@ -468,6 +484,8 @@ export default function VisualizarTurmas(){
             height:'80%',
             elevation:2
         }}
+        value={txtNumeroTurma}
+        onChangeText={setTxtNumeroTurma}
         placeholder="Digite a turma para pesquisar"
         />
         <TouchableOpacity style={{
@@ -476,7 +494,9 @@ export default function VisualizarTurmas(){
             marginLeft:'5%',
             width:'30%',
             height:'80%'
-        }}>
+        }}
+        onPress={()=>exibirTurmaDetalhada(txtNumeroTurma)}
+        >
             <Text style={{
                 color:'white',
                 alignSelf:'center',
@@ -486,6 +506,31 @@ export default function VisualizarTurmas(){
         </TouchableOpacity>
         </View>
         
+        {turmaDetalhada &&(
+            <View style={{
+                backgroundColor:'white',
+                elevation:5,
+                padding:5,
+                marginTop:'2%',
+                borderRadius:8,
+                width:'80%',
+                borderColor:'#ccc',
+                alignSelf:'center',
+                marginBottom:'1.5%'
+            }}>
+                <Text style={{
+                    alignSelf:'center',
+                    textAlign:'center',
+                    fontSize:15
+                }}>
+                    numero da turma: {turmaDetalhada.numeroTurma}{'\n'}
+                    a turma foi liberada? {turmaDetalhada.turmaLiberada ? 'Sim' : 'não'}
+                    {turmaDetalhada.horaLiberacao ? '\nhorario da liberação: '+turmaDetalhada.horaLiberacao : null}
+                </Text>
+                
+            </View>
+        )}
+
      </View>
 
      <TouchableOpacity style={{

@@ -1,9 +1,61 @@
 import { useNavigation } from "@react-navigation/native";
-import { Image, Text, View } from "react-native";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { Alert, Image, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { db } from "../src/firebaseConfig";
 
 export default function GerenciarTurmas(){
     const navigation = useNavigation() 
+
+    const [turmas, setTurmas] = useState([]);
+
+    const exibirTurmas = async () => {
+        try {
+            const querySnapshot = await getDocs(collection(db, 'turmas'));
+            
+        const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        setTurmas(data)
+    } catch(error){
+        console.log(error)
+    }
+    }
+
+    useEffect(()=>{
+        exibirTurmas()
+    },[])
+
+    const limparTurmasLiberadas = async () => {
+        Alert.alert('','Ok. Zerando as turmas liberadas...')
+        try {
+            for(let turma of turmas){
+                const turmaRef = doc(db,'turmas',turma.id)
+                await updateDoc(turmaRef, {
+                turmaLiberada: false
+                })
+            }
+          
+        Alert.alert('','Turmas liberadas zeradas com sucesso!')
+        } catch (error) {
+            console.error("Erro ao atualizar turma no Firestore:", error);
+        }
+    }
+
+    function confirmarOpcao(){
+        Alert.alert('','Deseja realmente zerar todas as turmas liberadas?',[
+                {
+                    text:'Cancelar',
+                    style:'cancel',
+                },
+                {
+                    text:'Confirmar',
+                    onPress: ()=> limparTurmasLiberadas(),
+                }
+            ],
+            {cancelable:true}
+        );
+    }
 return (
     <View style={{flex:1, justifyContent:'center', padding:20}}>
         <Image style={{
@@ -69,7 +121,13 @@ return (
                 }}>Liberar Turmas</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{backgroundColor:'blue', marginTop:'2%', borderRadius:7, padding:4}}>
+            <TouchableOpacity style={{
+                backgroundColor:'blue', 
+                marginTop:'2%', 
+                borderRadius:7, 
+                padding:4}}
+                onPress={()=>confirmarOpcao()}
+                >
                 <Text style={{
                     color:'white',
                     fontWeight:'bold',
