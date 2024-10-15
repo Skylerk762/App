@@ -11,12 +11,14 @@ import AddTurma from "./AddTurma"
 import RemoverTurma from "./RemoverTurma"
 import LiberarTurmas from "./LiberarTurmas"
 import RecuperarSenha from "./RecuperarSenha"
+import TelaLoading from "./TelaLoading"
 
 export default function AppNavigator(){
     const Stack = createStackNavigator()
     return(
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown:false}}>
+            <Stack.Screen name="TelaLoading" component={TelaLoading}/>
             <Stack.Screen name="Login" component={Login}/>
             <Stack.Screen name="VisualizarTurmas" component={VisualizarTurmas}/>
             <Stack.Screen name="RecuperarSenha" component={RecuperarSenha}/>

@@ -1,5 +1,5 @@
 
-import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "react-native";
@@ -45,9 +45,8 @@ export default function Login() {
     flex:1,
     justifyContent:'center',
     padding:20
-   }
-    
-   }>
+}}>
+  <StatusBar backgroundColor={'blue'}/>
     <Image style={{
       width:150,
       height:150,
