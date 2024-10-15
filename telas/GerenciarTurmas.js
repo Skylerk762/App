@@ -32,7 +32,8 @@ export default function GerenciarTurmas(){
             for(let turma of turmas){
                 const turmaRef = doc(db,'turmas',turma.id)
                 await updateDoc(turmaRef, {
-                turmaLiberada: false
+                turmaLiberada: false,
+                horaLiberacao: null
                 })
             }
           
