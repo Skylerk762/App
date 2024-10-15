@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { collection, doc, Firestore, getDocs, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import { Image, Text, View } from "react-native";
 import { Divider } from "react-native-elements";
 import { TextInput } from "react-native-gesture-handler";
@@ -77,10 +77,15 @@ export default function LiberarTurmas(){
     };
 
     return(
+        <ScrollView contentContainerStyle={{
+            flexGrow:1,
+            justifyContent:'center',
+            padding:20
+        }}>
         <View style={{
             flex:1, justifyContent:"center",
-            padding:20,
         }}>
+        
             <Image style={{
       width:150,
       height:150,
@@ -492,5 +497,6 @@ export default function LiberarTurmas(){
         </TouchableOpacity>
 
         </View>
+        </ScrollView>
     )
 }

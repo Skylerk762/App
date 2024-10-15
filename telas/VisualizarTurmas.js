@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { Alert, TouchableOpacity } from "react-native";
+import { Alert, Modal, ScrollView, TouchableOpacity } from "react-native";
 import { Image, Text, View } from "react-native";
 import { Divider } from "react-native-elements";
 import { TextInput } from "react-native-gesture-handler";
@@ -15,6 +15,15 @@ export default function VisualizarTurmas(){
 
     const [txtNumeroTurma, setTxtNumeroTurma] = useState('');
     const [turmaDetalhada, setTurmaDetalhada] = useState(null);
+
+    const [openModal, setOpenModal] = useState(false);
+
+    function AbrirModal(){
+        setOpenModal(true)
+    }
+    function FecharModal(){
+        setOpenModal(false)
+    }
 
     const [turmas, setTurmas] = useState([]);
 
@@ -63,12 +72,17 @@ export default function VisualizarTurmas(){
        } else{
         Alert.alert('', 'Turma não encontrada!')
        }
+       setOpenModal(true)
     }
 
     return(
+        <ScrollView contentContainerStyle={{
+            flexGrow:1,
+            justifyContent:'center',
+            padding:20
+        }}>
         <View style={{
             flex:1, justifyContent:"center",
-            padding:20,
         }}>
             <Image style={{
       width:150,
@@ -507,28 +521,55 @@ export default function VisualizarTurmas(){
         </View>
         
         {turmaDetalhada &&(
-            <View style={{
+           <Modal 
+           transparent={true}
+           animationType="fade"
+           visible={openModal}
+           onRequestClose={FecharModal}
+       >
+           <View style={{ 
+           flex: 1, 
+           justifyContent: 'center', 
+           alignItems: 'center', 
+           backgroundColor: 'rgba(0, 0, 0, 0.23)'  // Fundo escuro atrás do modal
+           }}>
+                <View style={{
                 backgroundColor:'white',
                 elevation:5,
-                padding:5,
-                marginTop:'2%',
+                padding:10,
                 borderRadius:8,
-                width:'80%',
                 borderColor:'#ccc',
                 alignSelf:'center',
-                marginBottom:'1.5%'
             }}>
                 <Text style={{
                     alignSelf:'center',
                     textAlign:'center',
-                    fontSize:15
+                    fontSize:17,
+                        fontWeight:'bold'
                 }}>
                     numero da turma: {turmaDetalhada.numeroTurma}{'\n'}
                     a turma foi liberada? {turmaDetalhada.turmaLiberada ? 'Sim' : 'não'}
                     {turmaDetalhada.horaLiberacao ? '\nhorario da liberação: '+turmaDetalhada.horaLiberacao : null}
                 </Text>
-                
+
+                <TouchableOpacity style={{
+                    backgroundColor:'gray',
+                    borderRadius:7,
+                    marginTop:10
+                }}
+                onPress={()=>FecharModal()}
+                >
+                    <Text style={{
+                        padding:4,
+                        alignSelf:'center',
+                        color:'white',
+                        fontWeight:'bold'
+                    }}>Voltar</Text>
+                </TouchableOpacity>
             </View>
+            </View>
+            </Modal>
+            
         )}
 
      </View>
@@ -547,5 +588,6 @@ export default function VisualizarTurmas(){
         </TouchableOpacity>
 
         </View>
+        </ScrollView>
     )
 }
