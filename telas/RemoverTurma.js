@@ -40,7 +40,31 @@ export default function RemoverTurma(){
         console.log(error)
     }
 }
-    
+
+async function removerTodasAsTurmas(){
+    Alert.alert('','Ok, removendo as turmas...')
+    const querySnapshot = await getDocs(collection(db, 'turmas'));
+            
+    const turmasParaDeletar = querySnapshot.docs.map
+    ((dado) => deleteDoc(doc(db, 'turmas', dado.id)));
+
+    await Promise.all(turmasParaDeletar);
+    Alert.alert('','Turmas removidas com sucesso!')
+}
+function confirmarOpcao(){
+    Alert.alert('','Deseja realmente REMOVER todas as turmas?',[
+            {
+                text:'Cancelar',
+                style:'cancel',
+            },
+            {
+                text:'Confirmar',
+                onPress: ()=> removerTodasAsTurmas(),
+            }
+        ],
+        {cancelable:true}
+    );
+}
 
     const navigation = useNavigation() 
     return(
@@ -147,8 +171,9 @@ export default function RemoverTurma(){
                 padding:5,
                 marginTop:'3%',
                 borderRadius:9
-
-            }}>
+            }}
+            onPress={()=>confirmarOpcao()}
+            >
                 <Text style={{
                     color:'white',
                     fontWeight:'bold',

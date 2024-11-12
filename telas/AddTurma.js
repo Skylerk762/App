@@ -194,13 +194,14 @@ export default function AddTurma(){
             borderWidth:1,
             borderColor:'#ccc',
             backgroundColor:'white',
-            padding:4,
-            height:'4%',
+            paddingLeft:5,
+            paddingVertical:2,
             borderRadius:7,
             elevation:2,
             shadowOpacity:3,
             shadowColor:'gray',
-            marginTop:'2%'
+            marginTop:'2%',
+            
         }} 
         value={numeroTurma}
         onChangeText={setNumeroTurma}

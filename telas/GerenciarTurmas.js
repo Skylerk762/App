@@ -27,8 +27,8 @@ export default function GerenciarTurmas(){
     },[])
 
     const limparTurmasLiberadas = async () => {
-        Alert.alert('','Ok. Zerando as turmas liberadas...')
         try {
+            Alert.alert('','Ok. Zerando as turmas liberadas...')
             for(let turma of turmas){
                 const turmaRef = doc(db,'turmas',turma.id)
                 await updateDoc(turmaRef, {
@@ -39,7 +39,8 @@ export default function GerenciarTurmas(){
           
         Alert.alert('','Turmas liberadas zeradas com sucesso!')
         } catch (error) {
-            console.error("Erro ao atualizar turma no Firestore:", error);
+            Alert.alert('','Algum erro ocorreu!')
+            return;
         }
     }
 

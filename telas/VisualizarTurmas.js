@@ -22,6 +22,7 @@ export default function VisualizarTurmas(){
         setOpenModal(true)
     }
     function FecharModal(){
+        setTurmaDetalhada(null);
         setOpenModal(false)
     }
 
@@ -541,21 +542,58 @@ export default function VisualizarTurmas(){
                 borderColor:'#ccc',
                 alignSelf:'center',
             }}>
-                <Text style={{
-                    alignSelf:'center',
-                    textAlign:'center',
-                    fontSize:17,
-                        fontWeight:'bold'
+                <View style={{
+                    margin:5,
                 }}>
-                    numero da turma: {turmaDetalhada.numeroTurma}{'\n'}
-                    a turma foi liberada? {turmaDetalhada.turmaLiberada ? 'Sim' : 'não'}
-                    {turmaDetalhada.horaLiberacao ? '\nhorario da liberação: '+turmaDetalhada.horaLiberacao : null}
+                <Text style={{
+                    fontSize:17,
+                    textAlign:'center',
+                }}>
+                Numero da turma:
                 </Text>
-
+                <Text
+                style={{
+                    fontSize:17,
+                    textAlign:'center',
+                    fontWeight:'bold',
+                    textDecorationLine:'underline'
+                }}>
+                {turmaDetalhada.numeroTurma}
+                </Text>
+                <Text
+                style={{
+                    fontSize:17,
+                    textAlign:'center',
+                    marginTop:10
+                }}>
+                A turma foi liberada?
+                </Text>
+                <Text style={{
+                    fontSize:17,
+                    textAlign:'center',
+                    padding:5,
+                    fontWeight:'bold',
+                    textDecorationLine:'underline'
+                }}>
+                {turmaDetalhada.turmaLiberada ? 'Sim' : 'não'}
+                </Text>
+                {turmaDetalhada.horaLiberacao && (
+                     <Text style={{
+                        fontSize:17,
+                        textAlign:'center',
+                        fontWeight:'bold',
+                        textDecorationLine:'underline',
+                        marginTop:5,
+                        marginBottom:10
+                    }}>
+                    {'Turma liberada as: '+turmaDetalhada.horaLiberacao}
+                    </Text>
+                )}
+               
+                </View>
                 <TouchableOpacity style={{
                     backgroundColor:'gray',
                     borderRadius:7,
-                    marginTop:10
                 }}
                 onPress={()=>FecharModal()}
                 >
